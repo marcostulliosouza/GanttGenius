@@ -1,60 +1,47 @@
 import tkinter as tk
-from datetime import datetime, timedelta
-from tkinter import ttk, filedialog, messagebox  # Import messagebox module
+from datetime import datetime
+from tkinter import ttk, filedialog, messagebox
 from tkcalendar import DateEntry
 import pandas as pd
 import configparser
-"""
-V2.1
-Adicionado o cliente LOCALIZA
-"""
-"""
-V3.5
 
-Adicionado o config.ini para deixar a opcao de clientes editavel
-"""
-
+__version__ = "3.5.2"  # Versão com correção para coluna 7
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-# # Imprime todas as seções e suas chaves
-# for section in config.sections():
-#     print(f"Seção: {section}")
-#     for key in config[section]:
-#         print(f"  {key} = {config[section][key.upper()]}")
-#
-# # Tenta acessar a seção 'Substituicoes'
-# if 'Substituicoes' in config:
-#     substituicoes = dict(config['Substituicoes'])
-#     print(substituicoes)
-# else:
-#     print("A seção 'Substituicoes' não foi encontrada.")
 
-__version__ = "3.5"
 class AplicacaoDesktop:
     def __init__(self, root):
         self.root = root
-        self.root.title(f"GanttGenius - Conversor de Tabela para BetterCall - V{__version__} - 13/08/24")
+        self.root.title(f"GanttGenius - Conversor de Tabela para BetterCall - V{__version__}")
 
         self.frame = ttk.Frame(root, padding="10")
         self.frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
+        # Interface (mantida igual)
         ttk.Label(self.frame, text="Tabela 1:").grid(row=0, column=0, sticky=tk.W)
         self.tabela1_entry = ttk.Entry(self.frame, width=30)
         self.tabela1_entry.grid(row=0, column=1, sticky=(tk.W, tk.E))
-        ttk.Button(self.frame, text="Carregar a Programação de Recursos", command=self.carregar_tabela1).grid(row=0, column=2, sticky=tk.W)
+        ttk.Button(self.frame, text="Carregar a Programação de Recursos", command=self.carregar_tabela1).grid(row=0,
+                                                                                                              column=2,
+                                                                                                              sticky=tk.W)
 
         ttk.Label(self.frame, text="Tabela 2:").grid(row=1, column=0, sticky=tk.W)
         self.tabela2_entry = ttk.Entry(self.frame, width=30)
         self.tabela2_entry.grid(row=1, column=1, sticky=(tk.W, tk.E))
-        ttk.Button(self.frame, text="Carregar a Programação por Hora_V2", command=self.carregar_tabela2).grid(row=1, column=2, sticky=tk.W)
+        ttk.Button(self.frame, text="Carregar a Programação por Hora_V2", command=self.carregar_tabela2).grid(row=1,
+                                                                                                              column=2,
+                                                                                                              sticky=tk.W)
 
         ttk.Label(self.frame, text="Data de produção:").grid(row=2, column=0, sticky=tk.W)
-        self.data_entry = DateEntry(self.frame, width=12, background='darkblue', foreground='white', borderwidth=2, date_pattern='yyyy-mm-dd')
+        self.data_entry = DateEntry(self.frame, width=12, background='darkblue', foreground='white', borderwidth=2,
+                                    date_pattern='yyyy-mm-dd')
         self.data_entry.grid(row=2, column=1, sticky=(tk.W, tk.E))
 
-        ttk.Button(self.frame, text="Gerar Gantt BetterCall", command=self.analisar_gerar_tabela).grid(row=3, column=0, columnspan=3, pady=10)
+        ttk.Button(self.frame, text="Gerar Gantt BetterCall", command=self.analisar_gerar_tabela).grid(row=3, column=0,
+                                                                                                       columnspan=3,
+                                                                                                       pady=10)
 
     def carregar_tabela(self, entry_widget, title):
         filepath = filedialog.askopenfilename(title=f"Selecionar {title}",
@@ -68,222 +55,260 @@ class AplicacaoDesktop:
     def carregar_tabela2(self):
         self.carregar_tabela(self.tabela2_entry, "Tabela 2")
 
+    def get_column_name(self, df, position):
+        """Obtém o nome da coluna pela posição, tratando o caso de colunas não nomeadas ou com nomes numéricos"""
+        if position < len(df.columns):
+            col_name = df.columns[position]
+            # Se for um número, assume que é uma coluna "Unnamed"
+            if isinstance(col_name, (int, float)):
+                return f'Unnamed: {position}'
+            return col_name
+        return None
+
     def analisar_gerar_tabela(self):
-        tabela1_path = self.tabela1_entry.get()
-        tabela2_path = self.tabela2_entry.get()
-        data_comparacao = self.data_entry.get() + ' 00:00:00'
-        tabela1 = pd.read_excel(tabela1_path)
-        tabela1_filtrada = tabela1[(tabela1.iloc[:, 27].astype(str).str.contains("TESTE"))]
+        try:
+            tabela1_path = self.tabela1_entry.get()
+            tabela2_path = self.tabela2_entry.get()
+            data_comparacao = self.data_entry.get() + ' 00:00:00'
 
-        # Converter 'Unnamed: 15' para datetime
-        tabela1_filtrada['Unnamed: 15'] = pd.to_datetime(tabela1_filtrada['Unnamed: 15'], errors='coerce', dayfirst=True)
+            if not tabela1_path or not tabela2_path:
+                messagebox.showerror("Erro", "Selecione ambos os arquivos!")
+                return
 
-        tabela1_filtrada_fil = tabela1_filtrada[tabela1_filtrada['Unnamed: 15'].dt.date == pd.to_datetime(data_comparacao).date()]
-        tabela2 = pd.read_excel(tabela2_path)
+            # Carrega as tabelas
+            tabela1 = pd.read_excel(tabela1_path)
+            tabela2 = pd.read_excel(tabela2_path)
 
-        for index, cell_value in tabela2.iloc[:, 1].items():
-            if 0 <= index < len(tabela2) and tabela2.iloc[index, 1] in tabela2.iloc[:, 1][tabela2.iloc[:, 1].duplicated(keep=False) & tabela2.iloc[:, 1].notnull()]:
-                mask = tabela2.iloc[:, 1] == tabela2.iloc[index, 1]
-                tabela2.loc[mask, 'Unnamed: 1'] = cell_value
-        tabela2['Unnamed: 1'] = tabela2['Unnamed: 1'].ffill()
-        mescladas = tabela2['Unnamed: 1'].duplicated(keep=False) & tabela2['Unnamed: 1'].notnull()
-        tabela2['Unnamed: 1'] = tabela2['Unnamed: 1'].mask(mescladas, tabela2['Unnamed: 1'].ffill())
+            # Verifica coluna 27 (TESTE) na tabela1
+            col_test = self.get_column_name(tabela1, 27)
+            if col_test is None or col_test not in tabela1.columns:
+                messagebox.showerror("Erro", "A Tabela 1 não possui a coluna de teste necessária (posição 27)!")
+                return
 
-        for index, cell_value in tabela2.iloc[:, 2].items():
-            if 0 <= index < len(tabela2) and tabela2.iloc[index, 2] in tabela2.iloc[:, 2][tabela2.iloc[:, 2].duplicated(keep=False) & tabela2.iloc[:, 2].notnull()]:
-                mask = tabela2.iloc[:, 2] == tabela2.iloc[index, 2]
-                tabela2.loc[mask, 'Unnamed: 2'] = cell_value
-        tabela2['Unnamed: 2'] = tabela2['Unnamed: 2'].ffill()
-        mescladas = tabela2['Unnamed: 2'].duplicated(keep=False) & tabela2['Unnamed: 2'].notnull()
-        tabela2['Unnamed: 2'] = tabela2['Unnamed: 2'].mask(mescladas, tabela2['Unnamed: 2'].ffill())
+            tabela1_filtrada = tabela1[(tabela1[col_test].astype(str).str.contains("TESTE"))].copy()
 
-        for index, cell_value in tabela2.iloc[:, 3].items():
-            if 0 <= index < len(tabela2) and tabela2.iloc[index, 3] in tabela2.iloc[:, 3][tabela2.iloc[:, 3].duplicated(keep=False) & tabela2.iloc[:, 3].notnull()]:
-                mask = tabela2.iloc[:, 3] == tabela2.iloc[index, 3]
-                tabela2.loc[mask, 'Unnamed: 3'] = cell_value
-        tabela2['Unnamed: 3'] = tabela2['Unnamed: 3'].ffill()
-        mescladas = tabela2['Unnamed: 2'].duplicated(keep=False) & tabela2['Unnamed: 3'].notnull()
-        tabela2['Unnamed: 3'] = tabela2['Unnamed: 3'].mask(mescladas, tabela2['Unnamed: 3'].ffill())
+            # Verifica coluna 15 (data) na tabela1
+            col_data = self.get_column_name(tabela1, 15)
+            if col_data is None or col_data not in tabela1_filtrada.columns:
+                messagebox.showerror("Erro", "A Tabela 1 não possui a coluna de data necessária (posição 15)!")
+                return
 
-        for index, cell_value in tabela2.iloc[:, 6].items():
-            if 0 <= index < len(tabela2) and tabela2.iloc[index, 6] in tabela2.iloc[:, 6][tabela2.iloc[:, 6].duplicated(keep=False) & tabela2.iloc[:, 6].notnull()]:
-                mask = tabela2.iloc[:, 6] == tabela2.iloc[index, 6]
-                tabela2.loc[mask, 'Unnamed: 6'] = cell_value
-        tabela2['Unnamed: 6'] = tabela2['Unnamed: 6'].ffill()
-        mescladas = tabela2['Unnamed: 6'].duplicated(keep=False) & tabela2['Unnamed: 6'].notnull()
-        tabela2['Unnamed: 6'] = tabela2['Unnamed: 6'].mask(mescladas, tabela2['Unnamed: 6'].ffill())
+            tabela1_filtrada[col_data] = pd.to_datetime(tabela1_filtrada[col_data], errors='coerce', dayfirst=True)
+            tabela1_filtrada_fil = tabela1_filtrada[
+                tabela1_filtrada[col_data].dt.date == pd.to_datetime(data_comparacao).date()]
 
-        valores_filtro = ["HP", "TESTE FUNCIONAL",
-                          "PÓS COMPOSIÇÃO",
-                          "TRI",
-                          "GRAVAÇÃO DO CI PTH",
-                          "GRAVAÇÃO DO CI SMT",
-                          "MONTAGEM MECÂNICA"]
-        tabela2_filtrada = tabela2[tabela2.iloc[:, 6].isin(valores_filtro)]
-        tabela3 = pd.DataFrame()
-        for index, row_tabela2 in tabela2_filtrada.iterrows():
-            for index, row_tabela1 in tabela1_filtrada.iterrows():
-                condicao = (row_tabela2['Unnamed: 2'] == row_tabela1['Unnamed: 12']) and (row_tabela2['Unnamed: 6'] == row_tabela1['Unnamed: 14'])
-                if condicao:
-                    tabela3 = pd.concat([tabela3, pd.DataFrame(row_tabela2).T], ignore_index=True)
+            # Renomeia colunas numéricas para o padrão "Unnamed: X" na tabela2
+            tabela2.columns = [self.get_column_name(tabela2, i) or f'Unnamed: {i}' for i in range(len(tabela2.columns))]
 
-        # Verificar se há algum valor string na coluna 32 e excluir as linhas sem valor
-        tabela3 = tabela3[tabela3['Unnamed: 34'].notnull()]
+            # Preenche valores mesclados na tabela2
+            for col in [1, 2, 3, 6]:
+                col_name = f'Unnamed: {col}'
+                if col_name in tabela2.columns:
+                    tabela2[col_name] = tabela2[col_name].ffill()
 
-        for index_tabela3, row_tabela3 in tabela3.iterrows():
-            for index_tabela1, row_tabela1 in tabela1_filtrada_fil.iterrows():
-                condicao_verificacao = (row_tabela3['Unnamed: 2'] == row_tabela1['Unnamed: 12']) and (
-                        row_tabela3['Unnamed: 6'] == row_tabela1['Unnamed: 14']) and (row_tabela3['Unnamed: 7'] == row_tabela1['Unnamed: 2'])
-                if condicao_verificacao:
-                    if ((row_tabela1['Unnamed: 15'].hour == 5) &
-                            (row_tabela1['Unnamed: 15'].minute >= 30) &
-                            (row_tabela1['Unnamed: 15'].minute <= 59)):
-                        tabela3.at[index_tabela3, 'Unnamed: 13'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 6) &
-                          (row_tabela1['Unnamed: 15'].hour < 7)):
-                        tabela3.at[index_tabela3, 'Unnamed: 14'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 7) &
-                          (row_tabela1['Unnamed: 15'].hour < 8)):
-                        tabela3.at[index_tabela3, 'Unnamed: 15'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 8) &
-                          (row_tabela1['Unnamed: 15'].hour < 9)):
-                        tabela3.at[index_tabela3, 'Unnamed: 16'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 9) &
-                          (row_tabela1['Unnamed: 15'].hour < 10)):
-                        tabela3.at[index_tabela3, 'Unnamed: 17'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 10) &
-                          (row_tabela1['Unnamed: 15'].hour < 11)):
-                        tabela3.at[index_tabela3, 'Unnamed: 18'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 11) &
-                          (row_tabela1['Unnamed: 15'].hour < 12)):
-                        tabela3.at[index_tabela3, 'Unnamed: 19'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 12) &
-                          (row_tabela1['Unnamed: 15'].hour < 13)):
-                        tabela3.at[index_tabela3, 'Unnamed: 20'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 13) &
-                          (row_tabela1['Unnamed: 15'].hour < 14)):
-                        tabela3.at[index_tabela3, 'Unnamed: 21'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 14) &
-                          (row_tabela1['Unnamed: 15'].hour < 15)):
-                        tabela3.at[index_tabela3, 'Unnamed: 22'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour == 15) &
-                          (row_tabela1['Unnamed: 15'].minute >= 0) &
-                          (row_tabela1['Unnamed: 15'].minute < 18)):
-                        tabela3.at[index_tabela3, 'Unnamed: 23'] = 1
+            # Filtra tabela2
+            valores_filtro = ["HP", "TESTE FUNCIONAL", "PÓS COMPOSIÇÃO", "TRI",
+                              "GRAVAÇÃO DO CI PTH", "GRAVAÇÃO DO CI SMT", "MONTAGEM MECÂNICA"]
 
-                    elif ((row_tabela1['Unnamed: 15'].hour == 15) &
-                          (row_tabela1['Unnamed: 15'].minute >= 18) &
-                          (row_tabela1['Unnamed: 15'].minute <= 59)):
-                        tabela3.at[index_tabela3, 'Unnamed: 24'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 16) &
-                          (row_tabela1['Unnamed: 15'].hour < 17)):
-                        tabela3.at[index_tabela3, 'Unnamed: 25'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 17) &
-                          (row_tabela1['Unnamed: 15'].hour < 18)):
-                        tabela3.at[index_tabela3, 'Unnamed: 26'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 18) &
-                          (row_tabela1['Unnamed: 15'].hour < 19)):
-                        tabela3.at[index_tabela3, 'Unnamed: 27'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 19) &
-                          (row_tabela1['Unnamed: 15'].hour < 20)):
-                        tabela3.at[index_tabela3, 'Unnamed: 28'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 20) &
-                          (row_tabela1['Unnamed: 15'].hour < 21)):
-                        tabela3.at[index_tabela3, 'Unnamed: 29'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 21) &
-                          (row_tabela1['Unnamed: 15'].hour < 22)):
-                        tabela3.at[index_tabela3, 'Unnamed: 30'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 22) &
-                          (row_tabela1['Unnamed: 15'].hour < 23)):
-                        tabela3.at[index_tabela3, 'Unnamed: 31'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour >= 23) &
-                          (row_tabela1['Unnamed: 15'].hour < 24)):
-                        tabela3.at[index_tabela3, 'Unnamed: 32'] = 1
-                    elif ((row_tabela1['Unnamed: 15'].hour == 0) &
-                          (row_tabela1['Unnamed: 15'].minute >= 0) &
-                          (row_tabela1['Unnamed: 15'].minute <= 38)):
-                        tabela3.at[index_tabela3, 'Unnamed: 33'] = 1
-        if (str(tabela2.iloc[5,13]))==data_comparacao:
-            # tabela2 = tabela2[tabela2['Unnamed: 10'].notnull()]
-            nova_tabela = pd.DataFrame(
-                columns=['Unnamed: 0', 'Unnamed: 1', 'Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5',
-                         'Unnamed: 6', 'Unnamed: 7', 'Unnamed: 8', 'Unnamed: 9', 'Unnamed: 10', 'Unnamed: 11',
-                         'Unnamed: 12', 'Unnamed: 13', 'Unnamed: 14', 'Unnamed: 15', 'Unnamed: 16', 'Unnamed: 17',
-                         'Unnamed: 18', 'Unnamed: 19', 'Unnamed: 20', 'Unnamed: 21', 'Unnamed: 22', 'Unnamed: 23',
-                         'Unnamed: 24', 'Unnamed: 25', 'Unnamed: 26', 'Unnamed: 27', 'Unnamed: 28', 'Unnamed: 29',
-                         'Unnamed: 30', 'Unnamed: 31', 'Unnamed: 32', 'Unnamed: 33', 'Unnamed: 34', 'Unnamed: 35',
-                         'Unnamed: 36', 'Unnamed: 37', 'Unnamed: 38', 'Unnamed: 39', 'Unnamed: 40', 'Unnamed: 41',
-                         'Unnamed: 42'])
-            tabela3 = tabela3.iloc[:].drop_duplicates(keep='first')
-            for i in range(31):
-                nova_tabela.loc[i] = 0
-            nova_tabela = nova_tabela.fillna(0)
-            for i in range(31, len(tabela3) + 31):
-                nova_tabela.at[i, 'Unnamed: 0'] = str(tabela3.iloc[i - 31, 1])  # cliente
-                nova_tabela.at[i, 'Unnamed: 1'] = str(tabela3.iloc[i - 31, 2])  # produto
-                nova_tabela.at[i, 'Unnamed: 2'] = str(tabela3.iloc[i - 31, 3])  # descrição
-                nova_tabela.at[i, 'Unnamed: 3'] = str(tabela3.iloc[i - 31, 6])  # etapa
-                nova_tabela.at[i, 'Unnamed: 4'] = str(tabela3.iloc[i - 31, 10])  # rate
-                nova_tabela.at[i, 'Unnamed: 5'] = 0
-                nova_tabela.at[i, 'Unnamed: 6'] = 0
-                nova_tabela.at[i, 'Unnamed: 7'] = 0
-                nova_tabela.at[i, 'Unnamed: 8'] = str(tabela3.iloc[i - 31, 9])  # celula / pós
-                nova_tabela.at[i, 'Unnamed: 9'] = 0
-                nova_tabela.at[i, 'Unnamed: 10'] = str('COM TESTE')  # haste
-                nova_tabela.at[i, 'Unnamed: 11'] = 0
-                nova_tabela.at[i, 'Unnamed: 12'] = 0
-                nova_tabela.at[i, 'Unnamed: 13'] = 0  # T3BL
-                nova_tabela.at[i, 'Unnamed: 14'] = 0
-                nova_tabela.at[i, 'Unnamed: 15'] = 0  # T3BL
-                nova_tabela.at[i, 'Unnamed: 16'] = 0  # T3AL
-                nova_tabela.at[i, 'Unnamed: 17'] = 0
-                nova_tabela.at[i, 'Unnamed: 18'] = 0
-                nova_tabela.at[i, 'Unnamed: 19'] = 0  # T3AL
-                nova_tabela.at[i, 'Unnamed: 20'] = tabela3.iloc[i - 31, 13]  # T1BL
-                nova_tabela.at[i, 'Unnamed: 21'] = tabela3.iloc[i - 31, 14]
-                nova_tabela.at[i, 'Unnamed: 22'] = tabela3.iloc[i - 31, 15]
-                nova_tabela.at[i, 'Unnamed: 23'] = tabela3.iloc[i - 31, 16]
-                nova_tabela.at[i, 'Unnamed: 24'] = tabela3.iloc[i - 31, 17]
-                nova_tabela.at[i, 'Unnamed: 25'] = tabela3.iloc[i - 31, 18]  # T1BL
-                nova_tabela.at[i, 'Unnamed: 26'] = tabela3.iloc[i - 31, 19]  # T1AL
-                nova_tabela.at[i, 'Unnamed: 27'] = tabela3.iloc[i - 31, 20]
-                nova_tabela.at[i, 'Unnamed: 28'] = tabela3.iloc[i - 31, 21]
-                nova_tabela.at[i, 'Unnamed: 29'] = tabela3.iloc[i - 31, 22] + tabela3.iloc[i - 31, 23]
-                nova_tabela.at[i, 'Unnamed: 30'] = 0
-                nova_tabela.at[i, 'Unnamed: 31'] = tabela3.iloc[i - 31, 24]  # T2BL
-                nova_tabela.at[i, 'Unnamed: 32'] = tabela3.iloc[i - 31, 25]
-                nova_tabela.at[i, 'Unnamed: 33'] = tabela3.iloc[i - 31, 26]
-                nova_tabela.at[i, 'Unnamed: 34'] = tabela3.iloc[i - 31, 27]
-                nova_tabela.at[i, 'Unnamed: 35'] = tabela3.iloc[i - 31, 28]  # T2BL
-                nova_tabela.at[i, 'Unnamed: 36'] = tabela3.iloc[i - 31, 29]  # T2AL
-                nova_tabela.at[i, 'Unnamed: 37'] = tabela3.iloc[i - 31, 30]
-                nova_tabela.at[i, 'Unnamed: 38'] = tabela3.iloc[i - 31, 31]
-                nova_tabela.at[i, 'Unnamed: 39'] = tabela3.iloc[i - 31, 32]
-                nova_tabela.at[i, 'Unnamed: 40'] = tabela3.iloc[i - 31, 33]
-                nova_tabela.at[i, 'Unnamed: 41'] = 0
-                nova_tabela.at[i, 'Unnamed: 42'] = tabela3.iloc[i - 31, 34]  # totalprodução
-        else:
-            messagebox.showerror("Erro", "Arquivo não possui plano de produção para a data solicitada.")
-            #nova_tabela = None
-            return
-        substituicoes = {k.upper(): v for k, v in config['Substituicoes'].items()}
-        nova_tabela['Unnamed: 0'] = nova_tabela['Unnamed: 0'].map(substituicoes)
-        for i in range(len(nova_tabela)):
-               if "HP" in str(nova_tabela.at[i, 'Unnamed: 3']) or "TRI" in str(nova_tabela.at[i, 'Unnamed: 3']):
-                    nova_tabela.at[i, 'Unnamed: 1'] = str(nova_tabela.at[i, 'Unnamed: 1']) + ' - ' + str(
-                    nova_tabela.at[i, 'Unnamed: 3'])
-        nova_tabela.iloc[7, 0] = datetime.strptime(data_comparacao, "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y")
-        if nova_tabela is not None:
-            nova_tabela_path = filedialog.asksaveasfilename(defaultextension=".xlsx",
-                                                             filetypes=[("Arquivos Excel", "*.xlsx")])
-            if nova_tabela_path:
-                try:
-                    nova_tabela.to_excel(nova_tabela_path, index=False)
-                    messagebox.showinfo("Sucesso", f"Plano para o BetterCall gerado com sucesso: {nova_tabela_path}")
-                except Exception as e:
-                    messagebox.showerror("Erro", f"Erro ao salvar a nova tabela: {str(e)}")
-        else:
-            messagebox.showinfo("Aviso", "Não foi possível gerar a tabela. A condição não foi atendida.")
+            if 'Unnamed: 6' not in tabela2.columns:
+                messagebox.showerror("Erro", "A Tabela 2 não possui a coluna 'Unnamed: 6' necessária!")
+                return
+
+            tabela2_filtrada = tabela2[tabela2['Unnamed: 6'].isin(valores_filtro)]
+            tabela3 = pd.DataFrame()
+
+            # Verifica se a coluna 7 existe na tabela2
+            col7_tabela2 = 'Unnamed: 7'
+            col7_exists = col7_tabela2 in tabela2_filtrada.columns
+
+            # Verifica se a coluna 2 existe na tabela1
+            col2_tabela1 = self.get_column_name(tabela1, 2)
+            if col2_tabela1 is None or col2_tabela1 not in tabela1_filtrada.columns:
+                messagebox.showerror("Erro", "A Tabela 1 não possui a coluna 2 necessária!")
+                return
+
+            for _, row_tabela2 in tabela2_filtrada.iterrows():
+                for _, row_tabela1 in tabela1_filtrada.iterrows():
+                    condicao = (row_tabela2['Unnamed: 2'] == row_tabela1['Unnamed: 12']) and \
+                               (row_tabela2['Unnamed: 6'] == row_tabela1['Unnamed: 14'])
+
+                    # Só adiciona a condição da coluna 7 se ela existir em ambos os dataframes
+                    if col7_exists and 'Unnamed: 2' in row_tabela1:
+                        condicao = condicao and (row_tabela2[col7_tabela2] == row_tabela1['Unnamed: 2'])
+
+                    if condicao:
+                        tabela3 = pd.concat([tabela3, pd.DataFrame(row_tabela2).T], ignore_index=True)
+
+            # Restante do código mantido igual...
+            if 'Unnamed: 34' not in tabela3.columns:
+                messagebox.showerror("Erro", "A tabela gerada não possui a coluna 'Unnamed: 34' necessária!")
+                return
+
+            tabela3 = tabela3[tabela3['Unnamed: 34'].notnull()]
+
+            # Preenche os horários (código original)
+            for index_tabela3, row_tabela3 in tabela3.iterrows():
+                for index_tabela1, row_tabela1 in tabela1_filtrada_fil.iterrows():
+                    condicao = (row_tabela3['Unnamed: 2'] == row_tabela1['Unnamed: 12']) and \
+                               (row_tabela3['Unnamed: 6'] == row_tabela1['Unnamed: 14'])
+
+                    if col7_exists and 'Unnamed: 2' in row_tabela1:
+                        condicao = condicao and (row_tabela3[col7_tabela2] == row_tabela1['Unnamed: 2'])
+
+                    if condicao and 'Unnamed: 15' in row_tabela1:
+                        hora = row_tabela1['Unnamed: 15']
+                        if pd.notna(hora):
+                            # Lógica original de preenchimento dos horários
+                            if ((hora.hour == 5) & (hora.minute >= 30) & (hora.minute <= 59)):
+                                tabela3.at[index_tabela3, 'Unnamed: 13'] = 1
+                            elif ((hora.hour >= 6) & (hora.hour < 7)):
+                                tabela3.at[index_tabela3, 'Unnamed: 14'] = 1
+                            elif ((hora.hour >= 7) & (hora.hour < 8)):
+                                tabela3.at[index_tabela3, 'Unnamed: 15'] = 1
+                            elif ((hora.hour >= 8) & (hora.hour < 9)):
+                                tabela3.at[index_tabela3, 'Unnamed: 16'] = 1
+                            elif ((hora.hour >= 9) & (hora.hour < 10)):
+                                tabela3.at[index_tabela3, 'Unnamed: 17'] = 1
+                            elif ((hora.hour >= 10) & (hora.hour < 11)):
+                                tabela3.at[index_tabela3, 'Unnamed: 18'] = 1
+                            elif ((hora.hour >= 11) & (hora.hour < 12)):
+                                tabela3.at[index_tabela3, 'Unnamed: 19'] = 1
+                            elif ((hora.hour >= 12) & (hora.hour < 13)):
+                                tabela3.at[index_tabela3, 'Unnamed: 20'] = 1
+                            elif ((hora.hour >= 13) & (hora.hour < 14)):
+                                tabela3.at[index_tabela3, 'Unnamed: 21'] = 1
+                            elif ((hora.hour >= 14) & (hora.hour < 15)):
+                                tabela3.at[index_tabela3, 'Unnamed: 22'] = 1
+                            elif ((hora.hour == 15) & (hora.minute >= 0) & (hora.minute < 18)):
+                                tabela3.at[index_tabela3, 'Unnamed: 23'] = 1
+                            elif ((hora.hour == 15) & (hora.minute >= 18)):
+                                tabela3.at[index_tabela3, 'Unnamed: 24'] = 1
+                            elif ((hora.hour >= 16) & (hora.hour < 17)):
+                                tabela3.at[index_tabela3, 'Unnamed: 25'] = 1
+                            elif ((hora.hour >= 17) & (hora.hour < 18)):
+                                tabela3.at[index_tabela3, 'Unnamed: 26'] = 1
+                            elif ((hora.hour >= 18) & (hora.hour < 19)):
+                                tabela3.at[index_tabela3, 'Unnamed: 27'] = 1
+                            elif ((hora.hour >= 19) & (hora.hour < 20)):
+                                tabela3.at[index_tabela3, 'Unnamed: 28'] = 1
+                            elif ((hora.hour >= 20) & (hora.hour < 21)):
+                                tabela3.at[index_tabela3, 'Unnamed: 29'] = 1
+                            elif ((hora.hour >= 21) & (hora.hour < 22)):
+                                tabela3.at[index_tabela3, 'Unnamed: 30'] = 1
+                            elif ((hora.hour >= 22) & (hora.hour < 23)):
+                                tabela3.at[index_tabela3, 'Unnamed: 31'] = 1
+                            elif ((hora.hour >= 23) & (hora.hour < 24)):
+                                tabela3.at[index_tabela3, 'Unnamed: 32'] = 1
+                            elif ((hora.hour == 0) & (hora.minute <= 38)):
+                                tabela3.at[index_tabela3, 'Unnamed: 33'] = 1
+
+            # Verifica a data de produção
+            if len(tabela2.columns) > 13 and (str(tabela2.iloc[5, 13]) == data_comparacao):
+                nova_tabela = pd.DataFrame(
+                    columns=[f'Unnamed: {i}' for i in range(43)])
+
+                tabela3 = tabela3.iloc[:].drop_duplicates(keep='first')
+
+                # Preenche as primeiras 31 linhas com 0
+                for i in range(31):
+                    nova_tabela.loc[i] = 0
+
+                nova_tabela = nova_tabela.fillna(0)
+
+                # Preenche os dados
+                for i in range(31, len(tabela3) + 31):
+                    if i - 31 >= len(tabela3):
+                        continue
+
+                    # Mapeamento seguro das colunas
+                    col_mapping = {
+                        0: (1, str),  # cliente
+                        1: (2, str),  # produto
+                        2: (3, str),  # descrição
+                        3: (6, str),  # etapa
+                        4: (10, str),  # rate
+                        8: (9, str),  # celula / pós
+                        10: ('COM TESTE', str),  # haste
+                        20: (13, int),  # T1BL
+                        21: (14, int),
+                        22: (15, int),
+                        23: (16, int),
+                        24: (17, int),
+                        25: (18, int),
+                        26: (19, int),
+                        27: (20, int),
+                        28: (21, int),
+                        29: (22, int),
+                        31: (24, int),
+                        32: (25, int),
+                        33: (26, int),
+                        34: (27, int),
+                        35: (28, int),
+                        36: (29, int),
+                        37: (30, int),
+                        38: (31, int),
+                        39: (32, int),
+                        40: (33, int),
+                        42: (34, int)
+                    }
+
+                    for col, (src_col, conv_func) in col_mapping.items():
+                        col_name = f'Unnamed: {col}'
+                        if isinstance(src_col, int):
+                            if src_col < len(tabela3.columns):
+                                try:
+                                    value = tabela3.iloc[i - 31, src_col]
+                                    nova_tabela.at[i, col_name] = conv_func(value) if pd.notna(
+                                        value) else 0 if conv_func == int else ''
+                                except:
+                                    nova_tabela.at[i, col_name] = 0 if conv_func == int else ''
+                        else:
+                            nova_tabela.at[i, col_name] = src_col
+
+                    # Soma das colunas 22 e 23 para a coluna 29
+                    if 22 < len(tabela3.columns) and 23 < len(tabela3.columns):
+                        try:
+                            soma = tabela3.iloc[i - 31, 22] + tabela3.iloc[i - 31, 23]
+                            nova_tabela.at[i, 'Unnamed: 29'] = int(soma) if pd.notna(soma) else 0
+                        except:
+                            nova_tabela.at[i, 'Unnamed: 29'] = 0
+
+                # Aplica substituições de clientes
+                if 'Substituicoes' in config:
+                    substituicoes = {k.upper(): v for k, v in config['Substituicoes'].items()}
+                    nova_tabela['Unnamed: 0'] = nova_tabela['Unnamed: 0'].str.upper().map(substituicoes).fillna(
+                        nova_tabela['Unnamed: 0'])
+
+                # Adiciona descrição para HP e TRI
+                for i in range(len(nova_tabela)):
+                    if pd.notna(nova_tabela.at[i, 'Unnamed: 3']) and (
+                            "HP" in str(nova_tabela.at[i, 'Unnamed: 3']) or "TRI" in str(
+                            nova_tabela.at[i, 'Unnamed: 3'])):
+                        nova_tabela.at[
+                            i, 'Unnamed: 1'] = f"{nova_tabela.at[i, 'Unnamed: 1']} - {nova_tabela.at[i, 'Unnamed: 3']}"
+
+                # Adiciona a data formatada
+                nova_tabela.iloc[7, 0] = datetime.strptime(data_comparacao, "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y")
+
+                # Salva o arquivo
+                nova_tabela_path = filedialog.asksaveasfilename(
+                    defaultextension=".xlsx",
+                    filetypes=[("Arquivos Excel", "*.xlsx")])
+
+                if nova_tabela_path:
+                    try:
+                        nova_tabela.to_excel(nova_tabela_path, index=False)
+                        messagebox.showinfo("Sucesso",
+                                            f"Plano para o BetterCall gerado com sucesso: {nova_tabela_path}")
+                    except Exception as e:
+                        messagebox.showerror("Erro", f"Erro ao salvar a nova tabela: {str(e)}")
+            else:
+                messagebox.showerror("Erro", "Arquivo não possui plano de produção para a data solicitada.")
+                return
+
+        except Exception as e:
+            messagebox.showerror("Erro", f"Ocorreu um erro durante o processamento: {str(e)}")
+
 
 if __name__ == "__main__":
     root = tk.Tk()
