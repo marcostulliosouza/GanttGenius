@@ -16,7 +16,7 @@ executables = [
 # Chamada da função setup
 setup(
     name='GanttGenius',
-    version='3.5',
+    version='3.5.2',
     description='Análise e geração de planilhas Gantt com base em dados de duas tabelas específicas',
     options={
         "build_exe": {

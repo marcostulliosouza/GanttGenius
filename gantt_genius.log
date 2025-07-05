@@ -1,0 +1,171 @@
+2025-06-16 05:03:32,831 - CRITICAL - Erro fatal na aplicação: 'AplicacaoDesktop' object has no attribute 'registrar_no_banco'
+2025-06-16 05:03:42,737 - CRITICAL - Erro fatal na aplicação: 'AplicacaoDesktop' object has no attribute 'registrar_no_banco'
+2025-06-16 05:05:56,888 - ERROR - Erro no teste de conexão: 'NoneType' object has no attribute 'test_connection_prerequisites'
+2025-06-16 05:06:33,836 - ERROR - Erro ao registrar no banco: 'NoneType' object has no attribute 'test_connection_prerequisites'
+2025-06-16 05:06:58,446 - ERROR - Erro no teste de conexão: 'NoneType' object has no attribute 'test_connection_prerequisites'
+2025-06-16 05:32:13,392 - ERROR - Erro no teste de conexão: 'DatabaseManager' object has no attribute 'test_connection_prerequisites'
+2025-06-16 05:32:18,650 - ERROR - Erro ao registrar no banco: 'DatabaseManager' object has no attribute 'test_connection_prerequisites'
+2025-06-16 05:32:18,651 - INFO - Conexão com banco de dados fechada
+2025-06-16 05:52:01,122 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-16 05:52:01,123 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-16 05:52:01,360 - INFO - set_status:627 - Status: Configuração carregada. Pronto para uso.
+2025-06-16 05:52:01,360 - INFO - main:1303 - GanttGenius V4.1.0 iniciado com sucesso
+2025-06-16 05:53:35,896 - INFO - set_status:627 - Status: Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-16 05:53:38,100 - INFO - set_status:627 - Status: Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-16 05:53:44,253 - INFO - set_status:627 - Status: Iniciando processamento...
+2025-06-16 05:53:44,256 - INFO - set_status:627 - Status: Carregando planilhas...
+2025-06-16 05:53:45,413 - INFO - analisar_gerar_tabela:721 - Tabela1 carregada: 1536 linhas, 28 colunas
+2025-06-16 05:53:45,472 - INFO - analisar_gerar_tabela:728 - Tabela2 carregada: 452 linhas, 57 colunas
+2025-06-16 05:53:45,475 - INFO - set_status:627 - Status: Processando dados...
+2025-06-16 05:53:45,482 - INFO - processar_dados_completo:783 - Tabela1 filtrada por TESTE: 308 linhas
+2025-06-16 05:53:45,490 - INFO - processar_dados_completo:795 - Tabela1 filtrada por data: 35 linhas
+2025-06-16 05:53:45,495 - INFO - processar_dados_completo:815 - Tabela2 filtrada: 180 linhas
+2025-06-16 05:53:48,490 - INFO - processar_dados_completo:852 - Tabela3 processada: 44 linhas
+2025-06-16 05:53:48,734 - INFO - aplicar_substituicoes_clientes:1065 - Substituições de clientes aplicadas
+2025-06-16 05:53:48,736 - INFO - gerar_nova_tabela:1047 - Nova tabela gerada com 75 linhas
+2025-06-16 05:53:48,738 - INFO - set_status:627 - Status: Salvando arquivo...
+2025-06-16 05:53:53,330 - INFO - set_status:627 - Status: Arquivo gerado com sucesso!
+2025-06-16 05:53:57,372 - INFO - set_status:627 - Status: Pronto
+2025-06-16 05:55:26,734 - INFO - set_status:627 - Status: Iniciando registro no banco...
+2025-06-16 05:55:26,734 - INFO - connect:87 - Tentando conectar ao banco: 10.161.100.11:3306
+2025-06-16 05:57:18,242 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-16 05:57:18,242 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-16 05:57:18,438 - INFO - set_status:627 - Status: Configuração carregada. Pronto para uso.
+2025-06-16 05:57:18,438 - INFO - main:1303 - GanttGenius V4.1.0 iniciado com sucesso
+2025-06-16 05:57:21,227 - INFO - set_status:627 - Status: Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-16 05:57:22,884 - INFO - set_status:627 - Status: Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-16 05:57:25,215 - INFO - set_status:627 - Status: Testando conexão com banco de dados...
+2025-06-16 05:57:25,216 - INFO - connect:87 - Tentando conectar ao banco: 10.161.100.11:3306
+2025-06-20 23:39:08,681 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-20 23:39:08,682 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-20 23:39:08,929 - INFO - set_status:627 - Status: Configuração carregada. Pronto para uso.
+2025-06-20 23:39:08,929 - INFO - main:1388 - GanttGenius V4.1.0 iniciado com sucesso
+2025-06-20 23:39:52,326 - INFO - main:1404 - Aplicação finalizada
+2025-06-20 23:43:04,845 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-20 23:43:04,845 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-20 23:43:05,036 - INFO - set_status:627 - Status: Configuração carregada. Pronto para uso.
+2025-06-20 23:43:05,036 - INFO - main:1388 - GanttGenius V4.1.0 iniciado com sucesso
+2025-06-20 23:43:08,281 - INFO - set_status:627 - Status: Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-20 23:43:10,391 - INFO - set_status:627 - Status: Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-20 23:43:15,455 - INFO - set_status:627 - Status: Iniciando registro no banco...
+2025-06-20 23:43:15,457 - INFO - set_status:627 - Status: Conectando ao banco de dados...
+2025-06-20 23:43:15,458 - INFO - connect:87 - Tentando conectar ao banco: 10.161.100.11:3306
+2025-06-20 23:51:10,034 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-20 23:51:10,034 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-20 23:51:10,266 - INFO - set_status:627 - Status: Configuração carregada. Pronto para uso.
+2025-06-20 23:51:10,267 - INFO - main:1388 - GanttGenius V4.1.0 iniciado com sucesso
+2025-06-20 23:51:13,571 - INFO - set_status:627 - Status: Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-20 23:51:15,214 - INFO - set_status:627 - Status: Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-20 23:51:20,661 - INFO - set_status:627 - Status: Iniciando registro no banco...
+2025-06-20 23:51:20,663 - INFO - set_status:627 - Status: Conectando ao banco de dados...
+2025-06-20 23:51:20,663 - INFO - connect:87 - Tentando conectar ao banco: 10.161.100.11:3306
+2025-06-21 00:07:35,868 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-21 00:07:35,868 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 00:07:36,087 - INFO - set_status:627 - Status: Configuração carregada. Pronto para uso.
+2025-06-21 00:07:36,087 - INFO - main:1387 - GanttGenius V4.1.0 iniciado com sucesso
+2025-06-21 00:07:42,601 - INFO - set_status:627 - Status: Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-21 00:07:44,431 - INFO - set_status:627 - Status: Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-21 00:07:47,200 - INFO - set_status:627 - Status: Iniciando registro no banco...
+2025-06-21 00:07:47,202 - INFO - set_status:627 - Status: Conectando ao banco de dados...
+2025-06-21 00:07:47,202 - INFO - connect:87 - Tentando conectar ao banco: 10.161.100.11:3306
+2025-06-21 00:11:07,929 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-21 00:11:07,930 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 00:11:08,159 - INFO - set_status:403 - Status: Configuração carregada. Pronto para uso.
+2025-06-21 00:11:08,159 - INFO - main:522 - GanttGenius V4.1.1 iniciado com sucesso
+2025-06-21 00:11:09,790 - INFO - main:538 - Aplicação finalizada
+2025-06-21 00:13:55,726 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-21 00:13:55,727 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 00:13:55,965 - INFO - set_status:403 - Status: Configuração carregada. Pronto para uso.
+2025-06-21 00:13:55,965 - INFO - main:522 - GanttGenius V4.1.1 iniciado com sucesso
+2025-06-21 00:14:00,246 - INFO - set_status:403 - Status: Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-21 00:14:01,887 - INFO - set_status:403 - Status: Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-21 00:14:03,866 - INFO - set_status:403 - Status: Função de registro no banco será implementada
+2025-06-21 00:14:16,739 - INFO - main:538 - Aplicação finalizada
+2025-06-21 00:14:59,287 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-21 00:14:59,288 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 00:14:59,531 - INFO - set_status:627 - Status: Configuração carregada. Pronto para uso.
+2025-06-21 00:14:59,531 - INFO - main:1388 - GanttGenius V4.1.0 iniciado com sucesso
+2025-06-21 00:15:04,513 - INFO - set_status:627 - Status: Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-21 00:15:06,062 - INFO - set_status:627 - Status: Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-21 00:15:07,388 - INFO - set_status:627 - Status: Iniciando registro no banco...
+2025-06-21 00:15:07,389 - INFO - set_status:627 - Status: Conectando ao banco de dados...
+2025-06-21 00:15:07,389 - INFO - connect:87 - Tentando conectar ao banco: 10.161.100.11:3306
+2025-06-21 00:16:18,028 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-21 00:16:18,029 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 00:16:18,234 - INFO - set_status:513 - Status: Configuração carregada. Pronto para uso.
+2025-06-21 00:16:18,234 - INFO - main:678 - GanttGenius V4.1.2 iniciado com sucesso
+2025-06-21 00:16:20,905 - INFO - set_status:513 - Status: Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-21 00:16:22,593 - INFO - set_status:513 - Status: Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-21 00:16:23,791 - INFO - _import_mysql_connector:64 - MySQL Connector importado com sucesso
+2025-06-21 00:58:08,637 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-21 00:58:08,638 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 00:58:08,874 - INFO - set_status:627 - Status: Configuração carregada. Pronto para uso.
+2025-06-21 00:58:08,874 - INFO - main:1387 - GanttGenius V4.1.0 iniciado com sucesso
+2025-06-21 00:58:11,825 - INFO - set_status:627 - Status: Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-21 00:58:13,653 - INFO - set_status:627 - Status: Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-21 00:58:14,809 - INFO - set_status:627 - Status: Iniciando registro no banco...
+2025-06-21 00:58:14,810 - INFO - set_status:627 - Status: Conectando ao banco de dados...
+2025-06-21 00:58:14,810 - INFO - connect:87 - Tentando conectar ao banco: 10.161.100.11:3306
+2025-06-21 00:58:22,064 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-21 00:58:22,064 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 00:58:22,334 - INFO - set_status:627 - Status: Configuração carregada. Pronto para uso.
+2025-06-21 00:58:22,334 - INFO - main:1387 - GanttGenius V4.1.0 iniciado com sucesso
+2025-06-21 00:58:23,465 - INFO - set_status:627 - Status: Testando conexão com banco de dados...
+2025-06-21 00:58:23,465 - INFO - connect:87 - Tentando conectar ao banco: 10.161.100.11:3306
+2025-06-21 00:58:32,790 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-21 00:58:32,791 - INFO - <module>:41 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 00:58:33,039 - INFO - set_status:627 - Status: Configuração carregada. Pronto para uso.
+2025-06-21 00:58:33,039 - INFO - main:1387 - GanttGenius V4.1.0 iniciado com sucesso
+2025-06-21 00:58:34,337 - INFO - set_status:627 - Status: Testando conexão com banco de dados...
+2025-06-21 00:58:34,337 - INFO - connect:87 - Tentando conectar ao banco: 10.161.100.11:3306
+2025-06-21 01:12:10,981 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-21 01:12:10,982 - INFO - <module>:40 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 01:12:11,072 - INFO - __init__:276 - Componentes inicializados com sucesso
+2025-06-21 01:12:11,173 - INFO - setup_ui:337 - Interface configurada com sucesso
+2025-06-21 01:12:11,229 - INFO - set_status:369 - Status: Configuração carregada. Pronto para uso.
+2025-06-21 01:12:11,230 - INFO - test_initial_setup:354 - Configuração inicial OK
+2025-06-21 01:12:11,230 - INFO - main:551 - GanttGenius V4.1.2 iniciado com sucesso
+2025-06-21 01:12:14,683 - INFO - set_status:369 - Status: \u2705 Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-21 01:12:14,683 - INFO - carregar_tabela:429 - Arquivo carregado: C:/Users/marcos.souza/Downloads/210625/RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-21 01:12:16,568 - INFO - set_status:369 - Status: \u2705 Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-21 01:12:16,568 - INFO - carregar_tabela:429 - Arquivo carregado: C:/Users/marcos.souza/Downloads/210625/RPT09 - Programaçao por Hora_V2.xls
+2025-06-21 01:12:25,110 - INFO - set_status:369 - Status: Testando conexão com banco de dados...
+2025-06-21 01:12:25,110 - INFO - connect:58 - Iniciando conexão com banco de dados...
+2025-06-21 01:12:25,110 - INFO - connect:100 - Conectando ao banco: 10.161.100.11:3306
+2025-06-21 02:21:54,246 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-21 02:21:54,247 - INFO - <module>:40 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 02:21:54,338 - INFO - __init__:591 - Componentes inicializados com sucesso
+2025-06-21 02:21:54,415 - INFO - setup_ui:643 - Interface configurada com sucesso
+2025-06-21 02:21:54,468 - INFO - set_status:674 - Status: Configuração carregada. Pronto para uso.
+2025-06-21 02:21:54,468 - INFO - test_initial_setup:659 - Configuração inicial OK
+2025-06-21 02:21:54,468 - INFO - main:1432 - GanttGenius V4.1.3 iniciado com sucesso
+2025-06-21 02:21:59,557 - INFO - set_status:674 - Status: \u2705 Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-21 02:21:59,558 - INFO - carregar_tabela:732 - Arquivo carregado: C:/Users/marcos.souza/Downloads/210625/RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-21 02:22:01,451 - INFO - set_status:674 - Status: \u2705 Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-21 02:22:01,451 - INFO - carregar_tabela:732 - Arquivo carregado: C:/Users/marcos.souza/Downloads/210625/RPT09 - Programaçao por Hora_V2.xls
+2025-06-21 02:22:02,649 - INFO - set_status:674 - Status: Testando conexão com banco de dados...
+2025-06-21 02:22:02,649 - INFO - connect:58 - Iniciando conexão com banco de dados...
+2025-06-21 02:22:02,650 - INFO - connect:96 - Conectando ao banco: 10.161.100.11:3306
+2025-06-21 02:22:09,395 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-06-21 02:22:09,396 - INFO - <module>:40 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 02:22:09,453 - INFO - __init__:591 - Componentes inicializados com sucesso
+2025-06-21 02:22:09,548 - INFO - setup_ui:643 - Interface configurada com sucesso
+2025-06-21 02:22:09,599 - INFO - set_status:674 - Status: Configuração carregada. Pronto para uso.
+2025-06-21 02:22:09,600 - INFO - test_initial_setup:659 - Configuração inicial OK
+2025-06-21 02:22:09,600 - INFO - main:1432 - GanttGenius V4.1.3 iniciado com sucesso
+2025-06-21 02:22:13,194 - INFO - set_status:674 - Status: \u2705 Programação de Recursos carregada: RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-21 02:22:13,195 - INFO - carregar_tabela:732 - Arquivo carregado: C:/Users/marcos.souza/Downloads/210625/RPT14 - Programaçao por Recursos SMT-PTH_V2.xlsx
+2025-06-21 02:22:14,806 - INFO - set_status:674 - Status: \u2705 Programação por Hora_V2 carregada: RPT09 - Programaçao por Hora_V2.xls
+2025-06-21 02:22:14,806 - INFO - carregar_tabela:732 - Arquivo carregado: C:/Users/marcos.souza/Downloads/210625/RPT09 - Programaçao por Hora_V2.xls
+2025-06-21 02:22:15,641 - INFO - set_status:674 - Status: Iniciando registro no banco...
+2025-06-21 02:22:15,644 - INFO - set_status:674 - Status: Conectando ao banco de dados...
+2025-06-21 02:22:15,644 - INFO - connect:58 - Iniciando conexão com banco de dados...
+2025-06-21 02:22:15,645 - INFO - connect:96 - Conectando ao banco: 10.161.100.11:3306
+2025-07-05 03:34:57,119 - INFO - <module>:32 - Arquivo config.ini carregado com sucesso
+2025-07-05 03:34:57,120 - INFO - <module>:40 - Arquivo dbconfig.ini carregado com sucesso
+2025-07-05 03:34:57,177 - INFO - __init__:591 - Componentes inicializados com sucesso
+2025-07-05 03:34:57,265 - INFO - setup_ui:643 - Interface configurada com sucesso
+2025-07-05 03:34:57,317 - INFO - set_status:674 - Status: Configuração carregada. Pronto para uso.
+2025-07-05 03:34:57,317 - INFO - test_initial_setup:659 - Configuração inicial OK
+2025-07-05 03:34:57,317 - INFO - main:1432 - GanttGenius V4.1.3 iniciado com sucesso
+2025-07-05 03:35:00,014 - INFO - main:1448 - Aplicação finalizada

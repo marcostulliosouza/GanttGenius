@@ -5,7 +5,7 @@ from tkcalendar import DateEntry
 import pandas as pd
 import configparser
 
-__version__ = "3.5.2"  # Versão com correção para coluna 7
+__version__ = "3.5.7"  # Versão atualizada com validação de linhas vazias
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -273,6 +273,47 @@ class AplicacaoDesktop:
                         except:
                             nova_tabela.at[i, 'Unnamed: 29'] = 0
 
+                # ================= VALIDAÇÃO FINAL PÓS-PROCESSAMENTO =================
+                # Remove linhas que só têm o "1" automático mas sem horários reais
+                total_antes = len(nova_tabela) - 31
+                linhas_para_remover = []
+
+                for i in range(31, len(nova_tabela)):
+                    # Verifica se a linha tem produto válido
+                    produto = nova_tabela.at[i, 'Unnamed: 1'] if 'Unnamed: 1' in nova_tabela.columns else ''
+
+                    if pd.notna(produto) and str(produto).strip() != '' and str(produto).strip() != '0':
+                        # Conta apenas horários REAIS (exclui colunas de controle 30, 41, 42)
+                        horarios_reais = 0
+                        count_ones = 0
+
+                        # Colunas de horário válidas (exclui 30, 41, 42 que são controle)
+                        colunas_horario_validas = [col for col in range(20, 43) if col not in [30, 41, 42]]
+
+                        for col_hora in colunas_horario_validas:
+                            col_name = f'Unnamed: {col_hora}'
+                            if col_name in nova_tabela.columns:
+                                valor = nova_tabela.at[i, col_name]
+
+                                if pd.notna(valor) and valor != 0 and str(valor).strip() != '':
+                                    if valor == 1:
+                                        count_ones += 1
+                                    else:
+                                        horarios_reais += 1
+
+                        # Se só tem UM "1" e nenhum outro horário real, é linha automática
+                        if count_ones == 1 and horarios_reais == 0:
+                            linhas_para_remover.append(i)
+                            print(f"Linha {i} marcada para remoção - Produto: {produto} - Apenas '1' automático")
+
+                # Remove as linhas identificadas
+                if linhas_para_remover:
+                    nova_tabela = nova_tabela.drop(linhas_para_remover).reset_index(drop=True)
+
+                total_depois = len(nova_tabela) - 31
+                removidas = len(linhas_para_remover)
+                # =====================================================================
+
                 # Aplica substituições de clientes
                 if 'Substituicoes' in config:
                     substituicoes = {k.upper(): v for k, v in config['Substituicoes'].items()}
@@ -283,7 +324,7 @@ class AplicacaoDesktop:
                 for i in range(len(nova_tabela)):
                     if pd.notna(nova_tabela.at[i, 'Unnamed: 3']) and (
                             "HP" in str(nova_tabela.at[i, 'Unnamed: 3']) or "TRI" in str(
-                            nova_tabela.at[i, 'Unnamed: 3'])):
+                        nova_tabela.at[i, 'Unnamed: 3'])):
                         nova_tabela.at[
                             i, 'Unnamed: 1'] = f"{nova_tabela.at[i, 'Unnamed: 1']} - {nova_tabela.at[i, 'Unnamed: 3']}"
 
@@ -298,8 +339,16 @@ class AplicacaoDesktop:
                 if nova_tabela_path:
                     try:
                         nova_tabela.to_excel(nova_tabela_path, index=False)
-                        messagebox.showinfo("Sucesso",
-                                            f"Plano para o BetterCall gerado com sucesso: {nova_tabela_path}")
+
+                        # Mensagem de sucesso detalhada
+                        mensagem = f"Plano para o BetterCall gerado com sucesso: {nova_tabela_path}\n\n"
+                        mensagem += f"📊 Estatísticas do processamento:\n"
+                        mensagem += f"• Linhas processadas: {total_antes}\n"
+                        if removidas > 0:
+                            mensagem += f"• Linhas removidas (vazias/duplicadas): {removidas}\n"
+                        mensagem += f"• Linhas finais: {total_depois}"
+
+                        messagebox.showinfo("Sucesso", mensagem)
                     except Exception as e:
                         messagebox.showerror("Erro", f"Erro ao salvar a nova tabela: {str(e)}")
             else:

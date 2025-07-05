@@ -1,0 +1,16 @@
+2025-06-21 01:03:26,424 - INFO - setup_logging:43 - Sistema de logging configurado - arquivo: logs\gantt_genius.log
+2025-06-21 01:03:26,425 - INFO - main:660 - Iniciando GanttGenius V4.1.1
+2025-06-21 01:03:26,426 - INFO - load_configurations:76 - Arquivo config.ini carregado com sucesso
+2025-06-21 01:03:26,426 - INFO - load_configurations:81 - Arquivo dbconfig.ini carregado com sucesso
+2025-06-21 01:03:26,426 - INFO - load_configurations:97 - Configurações validadas com sucesso
+2025-06-21 01:03:26,585 - INFO - setup_ui:360 - Interface configurada com sucesso
+2025-06-21 01:03:26,586 - INFO - test_initial_setup:369 - Testando configuração inicial...
+2025-06-21 01:03:26,586 - INFO - test_initial_setup:384 - Dependências verificadas com sucesso
+2025-06-21 01:03:26,652 - INFO - set_status:415 - Status: Configuração OK. Pronto para uso.
+2025-06-21 01:03:26,652 - INFO - test_initial_setup:394 - Configuração inicial OK
+2025-06-21 01:03:26,652 - INFO - main:693 - Interface criada com sucesso
+2025-06-21 01:03:26,652 - INFO - main:703 - GanttGenius V4.1.1 iniciado com sucesso
+2025-06-21 01:03:40,931 - INFO - set_status:415 - Status: Testando conexão com banco de dados...
+2025-06-21 01:03:40,931 - INFO - testar_conexao_banco:424 - Iniciando teste de conexão com banco
+2025-06-21 01:03:40,931 - INFO - connect:118 - Iniciando processo de conexão com banco de dados
+2025-06-21 01:03:40,931 - INFO - connect:151 - Conectando ao banco: 10.161.100.11:3306 - DB: better_homolog
