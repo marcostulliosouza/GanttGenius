@@ -108,7 +108,7 @@ class AplicacaoDesktop:
 
             # Filtra tabela2
             valores_filtro = ["HP", "TESTE FUNCIONAL", "PÓS COMPOSIÇÃO", "TRI",
-                              "GRAVAÇÃO DO CI PTH", "GRAVAÇÃO DO CI SMT", "MONTAGEM MECÂNICA"]
+                              "GRAVAÇÃO DO CI PTH", "GRAVAÇÃO DO CI SMT", "MONTAGEM MECÂNICA", "EMBALAGEM", "TESTE ELÉTRICO"]
 
             if 'Unnamed: 6' not in tabela2.columns:
                 messagebox.showerror("Erro", "A Tabela 2 não possui a coluna 'Unnamed: 6' necessária!")
