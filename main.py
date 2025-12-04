@@ -12,6 +12,7 @@ config.read('config.ini')
 
 
 class AplicacaoDesktop:
+    
     def __init__(self, root):
         self.root = root
         self.root.title(f"GanttGenius - Conversor de Tabela para BetterCall - V{__version__}")
